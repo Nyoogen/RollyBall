@@ -30,7 +30,9 @@ public class PlayerController : MonoBehaviour
 		rigidbody.AddForce (movement * speed * Time.deltaTime);
 
 		// SchmooText wiping code
-		// I'm guessing that the 
+
+		// I'm guessing that incrementing the resetTimer using Time.deltaTime (time per frame) is a bad idea, because the
+		// timing on the wiping is really erratic
 		resetTimer = resetTimer + Time.deltaTime;
 
 		if (resetTimer > 1.5) 
@@ -50,10 +52,16 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	// So if you turn the other object into a trigger, it falls through the map, and since I want to interact with it (make it roll),
+	// I had to use a different function entirely (since OnTriggerEnter basically gets called when you go inside an object).
+
 	void OnCollisionEnter (Collision collision)
 	{
+		// OnCollisionEnter requires a Collision class object, which contains all the information involved with the collision,
+		// including what you just collided with - thus, what the comparison you get below
 		if (collision.collider.gameObject.tag == "Schmoo")
 		{
+			// Random.value generates a random number between 0.0 and 1.0
 			rNum = Random.value;
 			if (rNum < 0.2)
 			{
